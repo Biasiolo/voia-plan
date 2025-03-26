@@ -1,10 +1,11 @@
 import { defaultFormData } from "../data/formFileds"
 
-export const generateTemplate = (formData: typeof defaultFormData) => {
+export const generateClientDataView = (formData: typeof defaultFormData) => {
+  const acessosString = formData.accesses
+    .map((a) => `• ${a.channel} – Login: ${a.login}, Senha: ${a.password}`)
+    .join("\n")
 
-
-  return `{Regra: Seja objetivo, sem exageros semânticos} 
-Você é um estrategista de marketing de alta performance. Abaixo estão as informações cadastrais de um cliente. Leia com atenção e, a partir dessas informações, será possível criar planejamentos estratégicos, campanhas e recomendações personalizadas para este negócio.
+  return `CADASTRO
 
 Informações do Cliente:
 Nome da empresa: ${formData.companyName}
@@ -26,7 +27,12 @@ Presença Digital:
 Canais utilizados: ${formData.channels}
 Frequência de postagens: ${formData.postFrequency}
 Resultados percebidos: ${formData.currentResults}
+Acessos:
+${acessosString}
 
+Objetivos e Desafios:
+Objetivos de curto prazo: ${formData.shortTermGoals}
+Objetivos de longo prazo: ${formData.longTermGoals}
 Desafios atuais: ${formData.challenges}
 
 Recursos e Métricas:
@@ -39,13 +45,6 @@ Planejamento:
 Datas sazonais importantes: ${formData.seasonalDates}
 Lançamentos ou ações previstas: ${formData.plannedEvents}
 
-Com base nessas informações, você vai ajudar a:
 
-1. Criar um planejamento estratégico de marketing e comunicação
-2. Criar Blocos de Conteúdos
-3. Recomendar os melhores canais e formatos para a marca
-4. Sugerir ideias de campanhas e conteúdos para os próximos meses
-5. Criar estratégias de tráfego, engajamento e aumento de resultados
 `
-
 }

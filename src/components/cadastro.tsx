@@ -12,6 +12,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Clipboard, Download, Upload } from "lucide-react"
 import { defaultFormData, fieldMap } from "../data/formFileds"
 import { generateTemplate } from "../utils/templateGenerator"
+import { generateClientDataView } from "../utils/clientData"
 
 export function Cadastro() {
   const [formData, setFormData] = useState({ ...defaultFormData })
@@ -80,6 +81,21 @@ export function Cadastro() {
     reader.readAsText(file)
   }
 
+  const copyClientData = () => {
+    navigator.clipboard.writeText(generateClientDataView(formData))
+    window.alert("Cadastro completo copiado para a área de transferência.")
+  }
+  
+  const downloadClientData = () => {
+    const element = document.createElement("a")
+    const file = new Blob([generateClientDataView(formData)], { type: "text/plain" })
+    element.href = URL.createObjectURL(file)
+    element.download = `${formData.companyName || "cliente"}_cadastro_completo.txt`
+    document.body.appendChild(element)
+    element.click()
+    document.body.removeChild(element)
+  }
+
   const copyToClipboard = () => {
     navigator.clipboard.writeText(generateTemplate(formData))
     window.alert("Template copiado para a área de transferência.")
@@ -109,14 +125,11 @@ export function Cadastro() {
 
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab}>
-      <TabsList className="bg-gradient-to-b from-gray-300 to-gray-500 w-full grid grid-cols-2 rounded-3xl shadow-md mb-8">
-        <TabsTrigger value="form" className={triggerClass}>
-          Formulário
-        </TabsTrigger>
-        <TabsTrigger value="preview" className={triggerClass}>
-          Visualizar Template
-        </TabsTrigger>
-      </TabsList>
+      <TabsList className="bg-gradient-to-b from-gray-300 to-gray-500 w-full grid grid-cols-3 rounded-3xl shadow-md mb-8">
+  <TabsTrigger value="form" className={triggerClass}>Formulário</TabsTrigger>
+  <TabsTrigger value="client-data" className={triggerClass}>Cadastro Completo</TabsTrigger>
+  <TabsTrigger value="preview" className={triggerClass}>Prompt de Treinamento</TabsTrigger>
+</TabsList>
 
       <TabsContent value="form">
         <div className="grid gap-8 mb-8 max-w-4xl mx-auto rounded-3xl">
@@ -472,6 +485,44 @@ export function Cadastro() {
           </Card>
         </div>
       </TabsContent>
+
+      <TabsContent value="client-data">
+  <Card className="bg-gray-100 border-none shadow-xl rounded-3xl overflow-hidden">
+    <CardHeader className="bg-gradient-to-t from-gray-300 to-gray-400 rounded-t-3xl py-6 px-6">
+      <div className="flex flex-col gap-2">
+        <div>
+          <CardTitle className="text-left">Cadastro Completo</CardTitle>
+          <CardDescription className="text-left">
+            Visualize todas as informações preenchidas do cliente.
+          </CardDescription>
+        </div>
+
+        <div className="flex gap-2 mt-4 flex-wrap justify-end">
+          <label className="flex items-center gap-2 cursor-pointer">
+            <Upload className="w-4 h-4" />
+            <span className="text-sm font-medium text-gray-700">Carregar .txt</span>
+            <input type="file" accept=".txt" onChange={handleFileUpload} className="hidden" />
+          </label>
+
+          <Button className="bg-indigo-200 cursor-pointer" onClick={copyClientData}>
+            <Clipboard className="mr-2 h-4 w-4" />
+            Copiar
+          </Button>
+          <Button className="bg-emerald-600 cursor-pointer" onClick={downloadClientData}>
+            <Download className="mr-2 h-4 w-4" />
+            Baixar
+          </Button>
+        </div>
+      </div>
+    </CardHeader>
+
+    <CardContent>
+      <ScrollArea className="h-[500px] w-full rounded-md border p-4 text-sm whitespace-pre-wrap">
+        <pre>{generateClientDataView(formData)}</pre>
+      </ScrollArea>
+    </CardContent>
+  </Card>
+</TabsContent>
 
       <TabsContent value="preview">
         <Card className="bg-gray-100 border-none shadow-xl rounded-3xl overflow-hidden">
