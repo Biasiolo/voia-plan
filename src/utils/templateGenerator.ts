@@ -30,8 +30,6 @@ Resultados percebidos: ${formData.currentResults}
 Desafios atuais: ${formData.challenges}
 
 Recursos e Métricas:
-Orçamento de marketing: ${formData.budget}
-Equipe responsável: ${formData.team}
 KPIs acompanhados: ${formData.indicators}
 Ferramentas utilizadas: ${formData.tools}
 
