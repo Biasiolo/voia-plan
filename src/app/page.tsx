@@ -86,7 +86,7 @@ export default function Home() {
                 value={tab.value}
                 className="mt-0"
               >
-                <div className="bg-gray-100 rounded-2xl shadow-lg p-6 sm:p-8">
+                <div className="bg-gray-100 rounded-3xl shadow-lg p-6 sm:p-8">
                   <h2 className="text-2xl font-bold text-zinc-900 mb-6 border-b pb-4 border-gray-200">
                     {tab.title}
                   </h2>

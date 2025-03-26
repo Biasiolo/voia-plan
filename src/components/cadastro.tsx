@@ -183,8 +183,8 @@ export function Cadastro() {
             </CardContent>
           </Card>
 
-          <Card className="bg-white border-none shadow-xl rounded-2xl overflow-hidden">
-            <CardHeader className="bg-gradient-to-t from-gray-300 to-gray-400 rounded-t-2xl py-6 px-6">
+          <Card className="bg-gray-100 border-none shadow-xl rounded-3xl overflow-hidden">
+            <CardHeader className="bg-gradient-to-t from-gray-300 to-gray-400 rounded-t-3xl py-6 px-6">
               <CardTitle className="text-2xl font-semibold text-gray-800">Identidade e Posicionamento</CardTitle>
               <CardDescription>Informações sobre a identidade e posicionamento da marca</CardDescription>
             </CardHeader>
@@ -246,8 +246,8 @@ export function Cadastro() {
             </CardContent>
           </Card>
 
-          <Card className="bg-white border-none shadow-xl rounded-2xl overflow-hidden">
-            <CardHeader className="bg-gradient-to-t from-gray-300 to-gray-400 rounded-t-2xl py-6 px-6">
+          <Card className="bg-gray-100 border-none shadow-xl rounded-3xl overflow-hidden">
+            <CardHeader className="bg-gradient-to-t from-gray-300 to-gray-400 rounded-t-3xl py-6 px-6">
               <CardTitle className="text-2xl font-semibold text-gray-800">Público e Presença Digital</CardTitle>
               <CardDescription>Informações sobre o público-alvo e presença digital</CardDescription>
             </CardHeader>
@@ -356,8 +356,8 @@ export function Cadastro() {
             </CardContent>
           </Card>
 
-          <Card className="bg-white border-none shadow-xl rounded-2xl overflow-hidden">
-            <CardHeader className="bg-gradient-to-t from-gray-300 to-gray-400 rounded-t-2xl py-6 px-6">
+          <Card className="bg-gray-100 border-none shadow-xl rounded-3xl overflow-hidden">
+            <CardHeader className="bg-gradient-to-t from-gray-300 to-gray-400 rounded-t-3xl py-6 px-6">
               <CardTitle className="text-2xl font-semibold text-gray-800">Objetivos e Desafios</CardTitle>
               <CardDescription>Informações sobre objetivos e desafios da empresa</CardDescription>
             </CardHeader>
@@ -397,8 +397,8 @@ export function Cadastro() {
             </CardContent>
           </Card>
 
-          <Card className="bg-white border-none shadow-xl rounded-2xl overflow-hidden">
-            <CardHeader className="bg-gradient-to-t from-gray-300 to-gray-400 rounded-t-2xl py-6 px-6">
+          <Card className="bg-gray-100 border-none shadow-xl rounded-3xl overflow-hidden">
+            <CardHeader className="bg-gradient-to-t from-gray-300 to-gray-400 rounded-t-3xl py-6 px-6">
               <CardTitle className="text-2xl font-semibold text-gray-800">Recursos e Planejamento</CardTitle>
               <CardDescription>Informações sobre recursos, métricas e planejamento</CardDescription>
             </CardHeader>
@@ -474,8 +474,8 @@ export function Cadastro() {
       </TabsContent>
 
       <TabsContent value="preview">
-        <Card className="bg-white border-none shadow-xl rounded-2xl overflow-hidden">
-          <CardHeader className="bg-gradient-to-t from-gray-300 to-gray-400 rounded-t-2xl py-6 px-6">
+        <Card className="bg-gray-100 border-none shadow-xl rounded-3xl overflow-hidden">
+          <CardHeader className="bg-gradient-to-t from-gray-300 to-gray-400 rounded-t-3xl py-6 px-6">
             <div className="flex flex-col gap-2">
               <div>
                 <CardTitle className="text-left">Template Preenchido</CardTitle>
