@@ -3,6 +3,8 @@
 import type React from "react"
 import { useState } from "react"
 
+import jsPDF from "jspdf"
+
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -19,11 +21,9 @@ import { Textarea } from "@/components/ui/textarea"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ScrollArea } from "@/components/ui/scroll-area"
 
-import { Clipboard, Download } from "lucide-react"
+import { Clipboard, Download, Trash2, Plus } from "lucide-react"
 
 import { defaultFormData, formSections } from "../data/formFields"
-
-import { generateTemplate } from "../utils/templateGenerator"
 import { generateClientDataView } from "../utils/generateClientDataView"
 
 /**
@@ -86,62 +86,106 @@ export function Cadastro() {
   }
 
   // ==========================
-  // EXPORT TXT — CADASTRO
+  // COPIAR CADASTRO
   // ==========================
   const copyClientData = () => {
     navigator.clipboard.writeText(generateClientDataView(formData))
     alert("Cadastro completo copiado.")
   }
 
-  const downloadClientData = () => {
-    const element = document.createElement("a")
+  // ==========================
+  // EXPORTAR PDF
+  // ==========================
+  const downloadClientPDF = () => {
+    const doc = new jsPDF()
+    let y = 20
 
-    const file = new Blob([generateClientDataView(formData)], {
-      type: "text/plain",
+    doc.setFont("helvetica", "bold")
+    doc.setFontSize(18)
+    doc.text("Cadastro do Cliente", 14, y)
+
+    y += 12
+    doc.setFontSize(11)
+    doc.setFont("helvetica", "normal")
+
+    doc.text(
+      `Empresa: ${formData.companyName || "Não informado"}`,
+      14,
+      y
+    )
+
+    y += 10
+    doc.setDrawColor(200)
+    doc.line(14, y, 195, y)
+    y += 12
+
+    formSections.forEach((section) => {
+      if (y > 270) {
+        doc.addPage()
+        y = 20
+      }
+
+      doc.setFont("helvetica", "bold")
+      doc.setFontSize(13)
+      doc.text(section.title, 14, y)
+
+      y += 8
+
+      section.fields.forEach((field) => {
+        if (field.name === "accesses") return
+
+        const value = (formData[field.name] as string) || "Não informado"
+
+        doc.setFont("helvetica", "normal")
+        doc.setFontSize(10)
+
+        doc.text(`${field.label}:`, 16, y)
+        y += 5
+
+        const wrapped = doc.splitTextToSize(value, 170)
+        doc.text(wrapped, 18, y)
+
+        y += wrapped.length * 5 + 6
+      })
+
+      y += 8
     })
 
-    element.href = URL.createObjectURL(file)
-    element.download = `${formData.companyName || "cliente"}_cadastro.txt`
+    if (formData.accesses.length > 0) {
+      doc.setFont("helvetica", "bold")
+      doc.setFontSize(13)
+      doc.text("Acessos às Redes Sociais", 14, y)
 
-    document.body.appendChild(element)
-    element.click()
-    document.body.removeChild(element)
+      y += 8
+
+      formData.accesses.forEach((acc) => {
+        doc.setFont("helvetica", "normal")
+        doc.setFontSize(10)
+
+        doc.text(
+          `• ${acc.channel} | Login: ${acc.login} | Senha: ${acc.password}`,
+          16,
+          y
+        )
+
+        y += 6
+      })
+    }
+
+    doc.save(`${formData.companyName || "cliente"}_cadastro.pdf`)
   }
 
   // ==========================
-  // EXPORT TXT — TEMPLATE PROMPT
-  // ==========================
-  const copyTemplate = () => {
-    navigator.clipboard.writeText(generateTemplate(formData))
-    alert("Template copiado.")
-  }
-
-  const downloadTemplate = () => {
-    const element = document.createElement("a")
-
-    const file = new Blob([generateTemplate(formData)], {
-      type: "text/plain",
-    })
-
-    element.href = URL.createObjectURL(file)
-    element.download = `${formData.companyName || "cliente"}_template.txt`
-
-    document.body.appendChild(element)
-    element.click()
-    document.body.removeChild(element)
-  }
-
-  // ==========================
-  // UI HELPERS
+  // UI Helpers
   // ==========================
   const triggerClass = `
-    data-[state=active]:bg-gradient-to-b from-indigo-800 to-indigo-600 
+    data-[state=active]:bg-gradient-to-b from-teal-800 to-teal-600 
     data-[state=active]:text-white
     data-[state=active]:shadow-md
-    rounded-3xl
+    rounded-t-3xl
     transition-all 
     duration-300 
-    hover:bg-indigo-200
+    hover:bg-orange-200
     border-0
     cursor-pointer
   `
@@ -153,46 +197,42 @@ export function Cadastro() {
   // ==========================
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab}>
-      <TabsList className="bg-gradient-to-b from-gray-300 to-gray-500 w-full grid grid-cols-3 rounded-3xl shadow-md mb-8">
+      {/* ===== ABAS ===== */}
+      <TabsList className="w-full grid grid-cols-2 bg-gray-100 rounded-t-3xl shadow-inner mb-10">
         <TabsTrigger value="form" className={triggerClass}>
           Formulário
         </TabsTrigger>
 
         <TabsTrigger value="client-data" className={triggerClass}>
-          Cadastro
-        </TabsTrigger>
-
-        <TabsTrigger value="preview" className={triggerClass}>
-          Prompt
+          Cadastro Final
         </TabsTrigger>
       </TabsList>
 
       {/* ==========================
-          FORMULÁRIO DINÂMICO
+          FORMULÁRIO
       ========================== */}
       <TabsContent value="form">
-        <div className="grid gap-8 mb-8 max-w-4xl mx-auto rounded-3xl">
+        <div className="grid gap-10 max-w-6xl mx-auto rounded-3xl">
           {formSections.map((section, i) => (
             <Card
               key={i}
               className="bg-gray-100 border-none shadow-xl rounded-3xl overflow-hidden"
             >
-              <CardHeader className="bg-gradient-to-t from-gray-300 to-gray-400 py-6 px-6">
-                <CardTitle className="text-xl font-semibold text-gray-800">
+              <CardHeader className="bg-gradient-to-b from-gray-200 to-gray-300 px-8 py-6 rounded-t-3xl">
+                <CardTitle className="text-xl font-bold text-gray-900">
                   {section.title}
                 </CardTitle>
-
-                <CardDescription>
-                  Preencha as informações abaixo
+                <CardDescription className="text-gray-600">
+                  Preencha com atenção para gerar o planejamento completo.
                 </CardDescription>
               </CardHeader>
 
-              <CardContent className="p-6 space-y-6">
+              <CardContent className="p-8 space-y-6">
                 {section.fields.map((field) => {
                   if (field.name === "accesses") return null
 
                   return (
-                    <div key={field.name} className="grid gap-3">
+                    <div key={field.name} className="grid gap-2">
                       <Label className="text-sm font-medium text-gray-700">
                         {field.label}
                       </Label>
@@ -203,6 +243,7 @@ export function Cadastro() {
                           value={(formData[field.name] as string) ?? ""}
                           onChange={handleChange}
                           placeholder="Digite sua resposta..."
+                          className="rounded-xl min-h-[120px]"
                         />
                       ) : (
                         <Input
@@ -210,6 +251,7 @@ export function Cadastro() {
                           value={(formData[field.name] as string) ?? ""}
                           onChange={handleChange}
                           placeholder="Digite aqui..."
+                          className="rounded-xl h-11"
                         />
                       )}
                     </div>
@@ -218,26 +260,23 @@ export function Cadastro() {
 
                 {/* BLOCO ESPECIAL: ACESSOS */}
                 {section.title === "Presença Digital" && (
-                  <div className="grid gap-3 mt-6">
-                    <Label className="text-sm font-medium text-gray-700">
-                      Acessos às redes sociais:
+                  <div className="mt-10 space-y-4">
+                    <Label className="text-base font-semibold text-gray-800">
+                      Acessos às redes sociais
                     </Label>
 
                     {formData.accesses.map((access, index) => (
                       <div
                         key={index}
-                        className="grid grid-cols-4 gap-2 items-center"
+                        className="grid grid-cols-4 gap-3 items-center"
                       >
                         <Input
                           placeholder="Canal"
                           value={access.channel}
                           onChange={(e) =>
-                            handleAccessChange(
-                              index,
-                              "channel",
-                              e.target.value
-                            )
+                            handleAccessChange(index, "channel", e.target.value)
                           }
+                          className="rounded-xl"
                         />
 
                         <Input
@@ -246,6 +285,7 @@ export function Cadastro() {
                           onChange={(e) =>
                             handleAccessChange(index, "login", e.target.value)
                           }
+                          className="rounded-xl"
                         />
 
                         <Input
@@ -259,28 +299,28 @@ export function Cadastro() {
                               e.target.value
                             )
                           }
+                          className="rounded-xl"
                         />
 
                         <Button
                           type="button"
                           variant="outline"
                           onClick={() => removeAccess(index)}
-                          className="border-red-500 bg-red-200"
+                          className="rounded-xl border-red-400 hover:bg-red-50"
                         >
-                          −
+                          <Trash2 className="w-4 h-4 text-red-500" />
                         </Button>
                       </div>
                     ))}
 
-                    <div className="flex justify-end">
-                      <Button
-                        type="button"
-                        onClick={addAccess}
-                        className="bg-green-300 border-green-500"
-                      >
-                        + Adicionar acesso
-                      </Button>
-                    </div>
+                    <Button
+                      type="button"
+                      onClick={addAccess}
+                      className="rounded-xl bg-indigo-600 hover:bg-indigo-700"
+                    >
+                      <Plus className="w-4 h-4 mr-2" />
+                      Adicionar acesso
+                    </Button>
                   </div>
                 )}
               </CardContent>
@@ -290,64 +330,63 @@ export function Cadastro() {
       </TabsContent>
 
       {/* ==========================
-          CADASTRO TXT
+          CADASTRO FINAL + PDF
       ========================== */}
       <TabsContent value="client-data">
         <Card className="bg-gray-100 border-none shadow-xl rounded-3xl overflow-hidden">
-          <CardHeader className="bg-gradient-to-t from-gray-300 to-gray-400 py-6 px-6">
-            <CardTitle>Cadastro Completo</CardTitle>
+          <CardHeader className="bg-gradient-to-b from-gray-200 to-gray-300 px-8 py-6">
+            <CardTitle className="text-xl font-bold">
+              Cadastro Completo
+            </CardTitle>
 
-            <div className="flex gap-2 mt-4 justify-end flex-wrap">
-              <Button onClick={copyClientData}>
+            <div className="flex gap-3 mt-6 justify-end flex-wrap">
+              <Button
+                onClick={copyClientData}
+                className="rounded-xl bg-orange-300 hover:bg-orange-500 cursor-pointer"
+              >
                 <Clipboard className="mr-2 h-4 w-4" />
                 Copiar
               </Button>
 
-              <Button onClick={downloadClientData}>
+              <Button
+                onClick={downloadClientPDF}
+                className="rounded-xl bg-emerald-400 hover:bg-emerald-500 cursor-pointer"
+              >
                 <Download className="mr-2 h-4 w-4" />
-                Baixar
+                Baixar PDF
               </Button>
             </div>
           </CardHeader>
 
-          <CardContent>
-            <ScrollArea className="h-[500px] w-full rounded-md border p-4 whitespace-pre-wrap">
-              <pre>{generateClientDataView(formData)}</pre>
-            </ScrollArea>
-          </CardContent>
-        </Card>
-      </TabsContent>
-
-      {/* ==========================
-          TEMPLATE PROMPT
-      ========================== */}
-      <TabsContent value="preview">
-        <Card className="bg-gray-100 border-none shadow-xl rounded-3xl overflow-hidden">
-          <CardHeader className="bg-gradient-to-t from-gray-300 to-gray-400 py-6 px-6">
-            <CardTitle>Template Preenchido</CardTitle>
-
-            <div className="flex gap-2 mt-4 justify-end flex-wrap">
-              <Button onClick={copyTemplate}>
-                <Clipboard className="mr-2 h-4 w-4" />
-                Copiar
-              </Button>
-
-              <Button onClick={downloadTemplate}>
-                <Download className="mr-2 h-4 w-4" />
-                Baixar
-              </Button>
-            </div>
-          </CardHeader>
-
-          <CardContent>
-            <ScrollArea className="h-[500px] w-full rounded-md border p-4">
-              <pre className="whitespace-pre-wrap text-sm">
-                {generateTemplate(formData)}
+          <CardContent className="p-6">
+            <ScrollArea className="h-[520px] w-full rounded-xl border bg-white p-5 whitespace-pre-wrap">
+              <pre className="text-sm text-gray-800 leading-relaxed">
+                {generateClientDataView(formData)}
               </pre>
             </ScrollArea>
           </CardContent>
         </Card>
       </TabsContent>
+      <div className="flex justify-center mt-10">
+  <Button
+    onClick={() => setActiveTab("client-data")}
+    className="bg-gradient-to-t from-teal-800 to-teal-600 
+               hover:opacity-80 
+               text-white 
+               rounded-3xl 
+               px-8 
+               py-6 
+               text-base 
+               font-semibold 
+               shadow-lg 
+               transition-all
+               cursor-pointer"
+  >
+    Visualizar Cadastro Gerado →
+  </Button>
+</div>
     </Tabs>
+    
   )
+  
 }

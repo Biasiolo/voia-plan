@@ -104,7 +104,7 @@ export function SocialMedia() {
         <Card key={index}>
           <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle>{item.title}</CardTitle>
-            <Button size="sm" className=" bg-gradient-to-t from-indigo-800 to-indigo-600 hover:bg-indigo-800 text-white rounded-3xl cursor-pointer" onClick={() => handleCopy(item.prompt, index)}>
+            <Button size="sm" className=" bg-gradient-to-t from-teal-800 to-teal-600 hover:bg-teal-800 text-white rounded-3xl cursor-pointer" onClick={() => handleCopy(item.prompt, index)}>
               <Clipboard className="w-4 h-4 mr-2" />
               {copiedIndex === index ? "Copiado!" : "Copiar"}
             </Button>
