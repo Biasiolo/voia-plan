@@ -19,9 +19,9 @@ export default function Home() {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-zinc-950 via-stone-900 to-zinc-950 px-4 py-10 sm:px-8">
+    <div className="min-h-screen bg-black px-2 py-8 sm:px-4">
       {/* Container principal */}
-      <div className="mx-auto w-full lg:w-10/12 overflow-hidden rounded-3xl border border-white/10 bg-white/5 shadow-2xl backdrop-blur-xl">
+      <div className="mx-auto w-full lg:w-11/12 overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-zinc-950 via-stone-900 to-zinc-950  shadow-2xl backdrop-blur-xl">
 
         {/* ==========================
             HEADER PREMIUM
@@ -94,7 +94,7 @@ export default function Home() {
                     {tab.label}
                   </h2>
 
-                  <div className="text-zinc-700 ">{tab.component}</div>
+                  <div className="text-zinc-700 rounded-3xl">{tab.component}</div>
                 </section>
               </TabsContent>
             ))}

@@ -213,8 +213,8 @@ export function Cadastro() {
       {/* ==========================
           FORMULÁRIO
       ========================== */}
-      <TabsContent value="form">
-        <div className="grid gap-10 max-w-6xl mx-auto rounded-3xl">
+      <TabsContent value="form" className="rounded-3xl">
+        <div className="grid gap-10 max-w-7xl mx-auto rounded-3xl">
           {formSections.map((section, i) => (
             <Card
               key={i}
