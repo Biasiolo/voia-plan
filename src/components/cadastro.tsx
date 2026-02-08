@@ -188,6 +188,8 @@ export function Cadastro() {
     hover:bg-orange-200
     border-0
     cursor-pointer
+    text-md
+    uppercase
   `
 
   const isLongField = (label: string) => label.length > 60
@@ -198,8 +200,8 @@ export function Cadastro() {
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab}>
       {/* ===== ABAS ===== */}
-      <TabsList className="w-full grid grid-cols-2 bg-gray-100 rounded-t-3xl shadow-inner mb-10">
-        <TabsTrigger value="form" className={triggerClass}>
+      <TabsList className="w-full grid grid-cols-2 bg-gray-100 rounded-t-3xl shadow-inner mb-10 ">
+        <TabsTrigger value="form" className={triggerClass} >
           Formulário
         </TabsTrigger>
 
@@ -233,7 +235,7 @@ export function Cadastro() {
 
                   return (
                     <div key={field.name} className="grid gap-2">
-                      <Label className="text-sm font-medium text-gray-700">
+                      <Label className="text-md font-medium text-teal-900">
                         {field.label}
                       </Label>
 

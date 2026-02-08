@@ -21,7 +21,8 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-zinc-950 via-stone-900 to-zinc-950 px-4 py-10 sm:px-8">
       {/* Container principal */}
-      <div className="mx-auto max-w-9/12 overflow-hidden rounded-3xl border border-white/10 bg-white/5 shadow-2xl backdrop-blur-xl">
+      <div className="mx-auto w-full lg:w-10/12 overflow-hidden rounded-3xl border border-white/10 bg-white/5 shadow-2xl backdrop-blur-xl">
+
         {/* ==========================
             HEADER PREMIUM
         ========================== */}
