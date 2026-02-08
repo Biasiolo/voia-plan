@@ -1,4 +1,4 @@
-import { defaultFormData } from "../data/formFileds"
+import { defaultFormData } from "../data/formFields"
 
 export const generateClientDataView = (formData: typeof defaultFormData) => {
   const acessosString = formData.accesses
