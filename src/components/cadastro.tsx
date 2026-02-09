@@ -218,24 +218,24 @@ export function Cadastro() {
           {formSections.map((section, i) => (
             <Card
               key={i}
-              className="bg-gray-100 border-none shadow-xl rounded-3xl overflow-hidden"
+              className=" border-none shadow-xl rounded-3xl overflow-hidden"
             >
-              <CardHeader className="bg-gradient-to-b from-gray-200 to-gray-300 px-8 py-6 rounded-t-3xl">
+              <CardHeader className="bg-gradient-to-b from-stone-300 to-neutral-500 px-8 py-6 rounded-t-3xl">
                 <CardTitle className="text-xl font-bold text-gray-900">
                   {section.title}
                 </CardTitle>
-                <CardDescription className="text-gray-600">
+                <CardDescription className="text-white">
                   Preencha com atenção para gerar o planejamento completo.
                 </CardDescription>
               </CardHeader>
 
-              <CardContent className="p-8 space-y-6">
+              <CardContent className="p-8 space-y-6 rounded-3xl">
                 {section.fields.map((field) => {
                   if (field.name === "accesses") return null
 
                   return (
                     <div key={field.name} className="grid gap-2">
-                      <Label className="text-md font-medium text-teal-900">
+                      <Label className="text-md font-medium text-teal-950">
                         {field.label}
                       </Label>
 
@@ -318,7 +318,7 @@ export function Cadastro() {
                     <Button
                       type="button"
                       onClick={addAccess}
-                      className="rounded-xl bg-indigo-600 hover:bg-indigo-700"
+                      className="rounded-xl bg-teal-600 hover:bg-teal-700 text-white"
                     >
                       <Plus className="w-4 h-4 mr-2" />
                       Adicionar acesso
