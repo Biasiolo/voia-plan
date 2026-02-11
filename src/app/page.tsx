@@ -68,8 +68,8 @@ export default function Home() {
                     text-white/70 transition-all
                     hover:text-white
 
-                    data-[state=active]:bg-white
-                    data-[state=active]:text-zinc-900
+                    data-[state=active]:bg-gradient-to-b from-teal-800 to-teal-600 
+                    data-[state=active]:text-white
                     data-[state=active]:shadow-md
                   "
                 >

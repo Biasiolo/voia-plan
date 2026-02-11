@@ -184,8 +184,8 @@ export function Cadastro() {
     data-[state=active]:shadow-md
     rounded-t-3xl
     transition-all 
-    duration-300 
-    hover:bg-orange-200
+    duration-200 
+    hover:bg-teal-200
     border-0
     cursor-pointer
     text-md
